@@ -1,0 +1,27 @@
+/* SignUp shares the same styling as SignIn via auth-container classes */
+/* SignUp-specific enhancements */
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group input {
+  transition: var(--transition);
+}
+
+.form-group input:hover {
+  border-color: var(--primary-red);
+}
+
+.form-group input:focus {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

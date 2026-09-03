@@ -1,0 +1,12 @@
+Flask==3.0.3
+Flask-CORS==4.0.1
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+python-dotenv==1.0.0
+Flask-Session==0.5.0
+psycopg2-binary>=2.9.0
+selenium==4.15.2
+requests==2.31.0
+beautifulsoup4==4.12.2
+schedule==1.2.0pymilvus>=0.4.14
+ollama>=0.1.0

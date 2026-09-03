@@ -1,0 +1,35 @@
+{
+  "name": "TUNEPS",
+  "display_name": "TUNEPS - Tunisian Government Procurement",
+  "source_type": "api",
+  "base_url": "https://www.tuneps.tn/api2/portail/bid/master/data",
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Content-Type": "application/json",
+    "Origin": "https://www.tuneps.tn",
+    "Referer": "https://www.tuneps.tn/portail/offres"
+  },
+  "auth_type": "none",
+  "parser_config": {
+    "data_path": "payload.data",
+    "method": "POST",
+    "payload": {
+      "listSort": [],
+      "dataSearch": [
+        {"key": "publicYn", "value": "Y", "specificSearch": "="}
+      ],
+      "listCol": [],
+      "pagination": {"offSet": 0, "limit": 5},
+      "sort": {"nameCol": "publicDt", "direction": "desc nulls last"}
+    },
+    "field_mapping": {
+      "reference": "bidNo",
+      "title": "bidNmFr",
+      "buyer": "bidInstNm",
+      "deadline": "bdRecvEndDt",
+      "publication_date": "publicDt"
+    }
+  }
+}

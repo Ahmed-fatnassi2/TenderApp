@@ -1,0 +1,52 @@
+menu_horiz
+Se connecter
+Frarrow_drop_down
+Accueil /
+Avis A.O
+Filtre de recherche
+
+N° A.O
+Objet A.O
+  Acheteur public
+  Mode passation
+searchRechercher
+autorenewRéinitialiser
+add_circle_outline
+N° A.O
+Acheteur public
+Date Publication
+Objet A.O
+Dernier Délai Soumissions Offres
+20260700011 Gouvernorat de Gafsa 01/07/2026 travaux d 'entertien du centre integré des jeunes et des enfants de gafsa 03/08/2026 10:00 info
+20260700010 Office National de la Protection Civile 01/07/2026 acquisition d’accessoires relatifs aux tenues réglementaires 03/08/2026 09:00 info
+20260700008 Office de Développement du Sud 01/07/2026 Acquisition de deux voitures service 30/07/2026 12:00 info
+20260607302 Ministère de la Défense Nationale 01/07/2026 l’acquisition des postes de travails 31/07/2026 10:00 info
+20260700006 Hôpital Habib Bourguiba Sfax 01/07/2026 طلب عروض تأهيل الشبكة الكهرباء والسلامة بمغازة المستشفى الجامعي الحبيب بورقيبة بصفاقس (قسط وحيد). 01/08/2026 12:00 info
+20260700003 Société de Transport du Sahel 01/07/2026 صفقة اطارية للتزوّد باطارات مطاطية لسنوات 2026-2027-2028 05/08/2026 10:00 info
+20260700005 Théâtre National 01/07/2026 RENOVATION DU LOT ELECTRICITE ET INCENDIE DE LA SALLE 4 ART 16/07/2026 14:00 info
+20260700004 Agence des Ports et des Installations de la Pêche 01/07/2026 Travaux d'exécution des chaussées au port de pèche Louza - Louata 03/08/2026 10:30 info
+20260607304 Conseil régional de Sidi Bouzid 01/07/2026 MODERNISATION DE LA CIRCONSCRIPTION SANITAIRE D’ESSABALA (DEUXIEME TRANCHE) 03/08/2026 10:00 info
+20260607336 Office des Terres Domaniales 01/07/2026 Acquisition Matériel roulants 03/08/2026 09:00 info
+10
+1 - 10 de 57988
+Bouton déclencheur
+Contact
+Adresse : Rue Laassel –
+face stade municipal de Bab
+Laassel (croisement 10 rue
+Béchir Sfar et rue Laassel)
+Téléphone : 70 130 340
+Fax : 70 130 342
+Modules
+Projets Programmés
+Avis A.O
+Consultations
+Catalogue
+Services
+Indicateurs de performance
+A propos du système
+Termes et conditions
+Terminologie
+Liste fournisseurs catégorisés
+Plan de site
+Copyright : Présidence du Gouvernement

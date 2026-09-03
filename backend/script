@@ -1,0 +1,135 @@
+& "C:\Program Files\PostgreSQL\18\bin\psql" -U postgres -h localhost -d tender_db
+.\venv\Scripts\Activate
+
+uvicorn api:app --host 0.0.0.0 --port 8081
+
+
+
+python -c "import requests; print(requests.post('http://localhost:5000/api/tenders/scrape').json())"
+
+docker compose down
+docker compose up -d --scale vllm-gpu=0
+
+docker compose restart openrag
+docker compose logs openrag --tail 30
+docker compose logs -f openrag
+docker compose logs -f openrag-cpu
+
+//////////////////////////////////////////
+these are the old ones
+docker compose --profile cpu stop
+docker compose --profile cpu start
+docker compose logs -f openrag-cpu
+////////////////////////////////////////////////////////////
+from here:
+
+curl http://localhost:5000/api/tenders/count
+curl http://localhost:5000/api/tenders?per_page=5
+curl -X POST http://localhost:5000/api/openrag/index-all | python3 -m json.tool
+
+running the backend:
+source venv/bin/activate
+python app.py
+
+
+
+
+# Start the system
+docker compose --profile cpu up -d
+
+# Stop the system
+docker compose --profile cpu down
+# Check logs
+docker compose logs -f openrag-cpu
+
+# Check Milvus count
+docker exec compose-openrag-cpu-1 bash -c "source /app/.venv/bin/activate && python3 -c \"from pymilvus import connections, Collection; connections.connect(host='milvus', port='19530'); col = Collection('tender_db'); col.load(); print(f'Documents: {col.num_entities}')\""
+
+# Test search
+curl -X POST http://localhost:5000/api/openrag/search -H "Content-Type: application/json" -d '{"query": "your query", "top_k": 5}' | python3 -m json.tool
+
+
+docker ps | grep milvus
+docker start compose-milvus-1
+
+
+
+
+# Connect to your PostgreSQL container
+docker exec -it tenderapp-postgres-1 psql -U postgres -d tender_db
+
+# Then run SQL queries
+SELECT * FROM users;
+
+# See all users with specific columns
+SELECT id, username, email, first_name, last_name, is_active, is_admin, created_at FROM users;
+
+# Count total users
+SELECT COUNT(*) FROM users;
+
+# Exit PostgreSQL
+\q
+
+
+
+
+
+
+
+INSERT INTO tenders (
+    reference,
+    buyer,
+    title,
+    publication_date,
+    deadline,
+    source,
+    scraped_at
+) VALUES 
+(
+    'TEST-EXPIRED-0011',
+    'Test Agency Alpha',
+    'TEST: Software Development Services (Expired)',
+    '2025-12-01 00:00:00',
+    '2026-01-15 10:00:00',
+    'TUNEPS',
+    NOW()
+),
+(
+    'TEST-EXPIRED-0012',
+    'Test Agency Beta',
+    'TEST: Network Infrastructure Upgrade (Expired)',
+    '2025-12-10 00:00:00',
+    '2026-02-01 15:30:00',
+    'TUNEPS',
+    NOW()
+),
+(
+    'TEST-EXPIRED-0013',
+    'Test Agency Gamma',
+    'TEST: IT Equipment Procurement (Expired)',
+    '2026-01-05 00:00:00',
+    '2026-02-28 23:59:59',
+    'HAICOP',
+    NOW()
+),
+(
+    'TEST-EXPIRED-0014',
+    'Test Buyer Agency',
+    'TEST: Expired Tender for Deletion Testing',
+    '2026-01-01 00:00:00',
+    '2026-01-15 10:00:00',
+    'TUNEPS',
+    NOW()
+);
+
+
+
+
+
+
+
+
+
+
+
+
