@@ -1,58 +1,47 @@
 
-# 🔍 TenderApp
 
-**Plateforme de veille intelligente des appels d'offres en Tunisie**
+🔍 TenderApp
+Intelligent Tender Monitoring Platform for Tunisia
 
-TenderApp est une plateforme web qui automatise la veille des appels d'offres publiés en Tunisie. Elle utilise un agent IA (RAG) avec LangChain pour la recherche sémantique, le scraping automatisé et des notifications personnalisées.
+TenderApp is a web platform that automates the monitoring of tenders published in Tunisia. It uses an AI agent (RAG) with LangChain for semantic search, automated scraping, and personalized notifications.
 
----
+🚀 Features
+- **Automated Scraping**: Daily collection from TUNEPS, HAICOP, and custom sources
+- **AI Agent**: Semantic search, IT classification, automatic translation (EN ↔ FR) with LangChain
+- **RAG System**: Contextual search with OpenRAG + Milvus
+- **Personalized Notifications**: Daily emails with filters (region, buyer, source)
+- **Automated Scheduler**: Scraping (07:00 AM), expired deletion (07:30 AM), email sending (08:00 AM)
+- **Secure Authentication**: Google OIDC
+- **Administration**: Scraping source management, expired tender monitoring
 
-## 🚀 Fonctionnalités
+🛠️ Tech Stack
+| Category | Technologies |
+|----------|--------------|
+| Frontend | React.js, Vite |
+| Backend | Flask (Python) |
+| Database | PostgreSQL |
+| Vector Database | Milvus |
+| RAG | OpenRAG |
+| AI | OpenAI GPT-4o-mini, LangChain |
+| Authentication | Google OIDC |
+| Containerization | Docker, Docker Compose |
+| Version Control | Git, GitHub |
 
-- **Scraping automatisé** : Collecte quotidienne depuis TUNEPS, HAICOP et sources personnalisées
-- **Agent IA** : Recherche sémantique, classification IT, traduction automatique (EN ↔ FR) avec LangChain
-- **Système RAG** : Recherche contextuelle avec OpenRAG + Milvus
-- **Notifications personnalisées** : Emails quotidiens avec filtres (région, acheteur, source)
-- **Scheduler automatisé** : Scraping (07h00), suppression expirés (07h30), envoi emails (08h00)
-- **Authentification sécurisée** : Google OIDC
-- **Administration** : Gestion des sources de scraping, monitoring des expirés
+🤖 AI Agent & LangChain
 
----
+**Pipeline**
+1. **Query Understanding**: EN ↔ FR translation with LangChain
+2. **Semantic Search**: OpenRAG + Milvus
+3. **Classification**: OpenAI GPT-4o-mini (relevance, category)
+4. **Custom Filtering**: Region / Buyer / Source
+5. **Results Generation**: Email digest / API
 
-## 🛠️ Stack Technique
+**LangChain in TenderApp**
+- **LLM Call Orchestration**: Prompt and response management
+- **Chaining**: Sequential processing steps (translation → search → classification)
+- **Agents**: Autonomous AI agent for tender research and analysis
 
-| Catégorie | Technologies |
-|-----------|--------------|
-| **Frontend** | React.js, Vite |
-| **Backend** | Flask (Python) |
-| **Base de données** | PostgreSQL |
-| **Vector Database** | Milvus |
-| **RAG** | OpenRAG |
-| **IA** | OpenAI GPT-4o-mini, LangChain |
-| **Authentification** | Google OIDC |
-| **Containerisation** | Docker, Docker Compose |
-| **Versionnage** | Git, GitHub |
-
----
-
-## 🤖 Agent IA & LangChain
-
-### Pipeline
-
-1. **Compréhension de la requête** : Traduction EN ↔ FR avec LangChain
-2. **Recherche sémantique** : OpenRAG + Milvus
-3. **Classification** : OpenAI GPT-4o-mini (pertinence, catégorie)
-4. **Filtrage personnalisé** : Région / Acheteur / Source
-5. **Génération des résultats** : Digest email / API
-
-### LangChain dans TenderApp
-
-- **Orchestration des appels LLM** : Gestion des prompts et des réponses
-- **Chaînage** : Enchaînement des étapes de traitement (traduction → recherche → classification)
-- **Agents** : Agent IA autonome pour la recherche et l'analyse des tenders
-
-### Catégories IT détectées
-
+**IT Categories Detected**
 - Software Development
 - Hardware
 - Networking
@@ -62,33 +51,24 @@ TenderApp est une plateforme web qui automatise la veille des appels d'offres pu
 - IT Services
 - Telecommunications
 
----
-
-## 🔐 Authentification
-
+🔐 Authentication
 - OpenID Connect (OIDC)
 - Google OAuth 2.0
-- Sessions sécurisées
+- Secure Sessions
 
----
-
-## 📊 API Endpoints
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/health` | Vérification de l'état |
-| GET | `/api/tenders` | Liste des appels d'offres |
-| GET | `/api/preferences/` | Préférences utilisateur |
-| PUT | `/api/preferences/` | Mise à jour préférences |
-| POST | `/api/scrapers/scrape-all-and-index` | Scraping complet |
-| POST | `/api/scrapers/delete-expired` | Suppression expirés |
+📊 API Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Health check |
+| GET | `/api/tenders` | List tenders |
+| GET | `/api/preferences/` | User preferences |
+| PUT | `/api/preferences/` | Update preferences |
+| POST | `/api/scrapers/scrape-all-and-index` | Full scraping |
+| POST | `/api/scrapers/delete-expired` | Delete expired tenders |
 | POST | `/api/it-notifications/send-test` | Test notification |
-| GET | `/api/openrag/search` | Recherche sémantique |
+| GET | `/api/openrag/search` | Semantic search |
 
----
-
-## 🧪 Tests
-
+🧪 Testing
 ```bash
 # Backend
 cd backend
@@ -99,48 +79,33 @@ cd frontend
 npm test
 ```
 
----
+📝 Roadmap
+- ✅ Multi-source scraping
+- ✅ Personalized email notifications
+- ✅ RAG semantic search
+- ✅ Google OIDC authentication
+- ✅ Automated scheduler
+- ✅ AI agent with LangChain
+- ⏳ WhatsApp / Telegram integration
+- ⏳ Advanced analytics dashboard
+- ⏳ Public API
+- ⏳ Conversational agent
+- ⏳ Automatic responses
 
-## 📝 Roadmap
+👥 Contributors
+**Ahmed Fatnassi** - Lead Developer
 
-- [x] Scraping multi-sources
-- [x] Notifications email personnalisées
-- [x] Recherche sémantique RAG
-- [x] Authentification Google OIDC
-- [x] Scheduler automatisé
-- [x] Agent IA avec LangChain
-- [ ] Intégration WhatsApp / Telegram
-- [ ] Dashboard analytique avancé
-- [ ] API publique
-- [ ] Agent conversationnel
-- [ ] Réponse automatique
+📄 License
+This project is developed as part of an end-of-study internship.
 
----
+🔗 Links
+- **GitHub**: https://github.com/Ahmed-fatnassi2/tenderapp
 
-## 👥 Contributeurs
-
-- **Ahmed Fatnassi** - Développeur principal
-
----
-
-## 📄 Licence
-
-Ce projet est développé dans le cadre d'un stage de fin d'études.
-
----
-
-## 🔗 Liens
-
-- **GitHub** : https://github.com/Ahmed-fatnassi2/tenderapp
+🙏 Acknowledgments
+- **Linagora** for the internship, supervision, and providing the OpenRAG platform
+- The teaching team for their support
+- The supervisor for guidance and valuable advice
 
 ---
 
-## 🙏 Remerciements
-
-- **Linagora** pour le stage, l'encadrement et la mise à disposition de la plateforme OpenRAG
-- **L'équipe pédagogique** pour leur accompagnement
-- **Le tuteur** pour le suivi et les précieux conseils
-
----
-
-Développé avec ❤️ par Ahmed Fatnassi
+Developed with ❤️ by Ahmed Fatnassi
