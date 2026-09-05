@@ -1,7 +1,10 @@
 
 
-🔍 TenderApp
-Intelligent Tender Monitoring Platform for Tunisia
+# 🔍 TENDERAPP
+
+## Intelligent Tender Monitoring Platform for Tunisia
+
+
 
 TenderApp is a web platform that automates the monitoring of tenders published in Tunisia. It uses an AI agent (RAG) with LangChain for semantic search, automated scraping, and personalized notifications.
 
