@@ -1619,18 +1619,31 @@ class OpenRAGClient:
 #             return False
 
     def delete_from_milvus_via_container(self, tender_id: int) -> bool:
-        """Delete a document from Milvus by executing Python inside the OpenRAG container."""
+        """
+        Delete a document from Milvus by executing Python inside the OpenRAG container.
+        """
         try:
             import subprocess
+            import tempfile
+            import os
         
             container_name = "compose-openrag-cpu-1"
         
-        # Use a location that the container user can write to
-        # The container runs as a non-root user, use /app/tmp/ or /tmp/ with proper permissions
-            script_path = "/tmp/delete_milvus.py"
+        # ✅ ÉTAPE 1 : Installer pymilvus dans le conteneur (si pas déjà installé)
+            print(f"📦 Checking/installing pymilvus in container...")
+            install_result = subprocess.run([
+                "docker", "exec", container_name,
+                "bash", "-c",
+                "pip install pymilvus -q 2>/dev/null || echo 'pymilvus already installed'"
+            ], capture_output=True, text=True, timeout=60)
         
-        # Create the Python script content
-            script_content = f'''
+            if install_result.returncode != 0:
+                print(f"⚠️ Could not install pymilvus, but continuing...")
+            else:
+                print(f"✅ pymilvus ready")
+        
+        # ✅ ÉTAPE 2 : Créer le script Python
+            script_content = f"""
 from pymilvus import connections, Collection
 
 try:
@@ -1652,41 +1665,68 @@ try:
         
 except Exception as e:
     print("ERROR: " + str(e))
-'''
+"""
         
-        # Create the script using Python directly instead of bash heredoc
-        # This avoids permission issues
-            create_cmd = f"python3 -c \"import os; open('{script_path}', 'w').write('''{script_content}''')\""
+        # Écrire le script dans un fichier temporaire LOCAL
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+                f.write(script_content)
+                script_path = f.name
         
-            result = subprocess.run([
-                "docker", "exec", container_name,
-                "bash", "-c", create_cmd
-            ], capture_output=True, text=True, timeout=10)
+            print(f"📝 Script created locally: {script_path}")
         
-            if result.returncode != 0:
-                print(f"❌ Failed to create script: {result.stderr}")
-                return False
+            try:
+            # ✅ ÉTAPE 3 : Copier le script vers le conteneur
+                cp_result = subprocess.run([
+                    "docker", "cp",
+                    script_path,
+                    f"{container_name}:/tmp/delete_milvus.py"
+                ], capture_output=True, text=True)
+            
+                if cp_result.returncode != 0:
+                    print(f"❌ Docker cp failed: {cp_result.stderr}")
+                    return False
+            
+                print(f"✅ Script copied to container: {container_name}:/tmp/delete_milvus.py")
+            
+            # ✅ ÉTAPE 4 : Exécuter le script
+                result = subprocess.run([
+                    "docker", "exec", container_name,
+                    "bash", "-c",
+                    "python3 /tmp/delete_milvus.py"
+                ], capture_output=True, text=True, timeout=30)
+            
+                if result.stderr:
+                    print(f"Container STDERR: {result.stderr}")
+            
+                print(f"Container STDOUT: {result.stdout}")
+            
+                if "DELETED" in result.stdout:
+                    logger.info(f"✅ Deleted tender {tender_id} from Milvus via container")
+                    return True
+                elif "NOT_FOUND" in result.stdout:
+                    logger.info(f"ℹ️ Tender {tender_id} not found in Milvus")
+                    return True
+                else:
+                    logger.error(f"❌ Milvus deletion failed: {result.stdout}")
+                    return False
+            
+            finally:
+            # Nettoyer
+                try:
+                    os.unlink(script_path)
+                except:
+                    pass
+                try:
+                    subprocess.run([
+                        "docker", "exec", container_name,
+                        "rm", "-f", "/tmp/delete_milvus.py"
+                    ], capture_output=True)
+                except:
+                    pass
         
-        # Execute the script
-            result = subprocess.run([
-                "docker", "exec", container_name,
-                "bash", "-c",
-                f"source /app/.venv/bin/activate && python3 {script_path}"
-            ], capture_output=True, text=True, timeout=30)
-        
-            if result.stderr:
-                print(f"Container STDERR: {result.stderr}")
-        
-            if "DELETED" in result.stdout:
-                logger.info(f"✅ Deleted tender {tender_id} from Milvus via container")
-                return True
-            elif "NOT_FOUND" in result.stdout:
-                logger.info(f"ℹ️ Tender {tender_id} not found in Milvus")
-                return True
-            else:
-                logger.error(f"❌ Milvus deletion failed: {result.stdout}")
-                return False
-        
+        except subprocess.TimeoutExpired:
+            logger.error(f"❌ Milvus deletion timed out for tender {tender_id}")
+            return False
         except Exception as e:
             logger.error(f"Failed to delete tender {tender_id} from Milvus via container: {e}")
             return False

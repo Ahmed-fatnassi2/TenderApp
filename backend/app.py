@@ -160,6 +160,7 @@ from routes.it_notification_routes import it_notification_bp
 from services.it_scheduler import start_it_scheduler, stop_it_scheduler, init_scheduler
 from services.scheduler_manager import scheduler_manager
 from services.scraper_scheduler import start_scraper_scheduler, stop_scraper_scheduler
+from services.it_scheduler import start_it_scheduler
 import atexit
 # Create Flask app
 app = Flask(__name__)

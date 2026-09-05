@@ -401,6 +401,37 @@ function ITSearch() {
     setExpandedId(expandedId === index ? null : index);
   };
 
+const getTenderSourceUrl = (tender) => {
+  // Si l'URL est déjà stockée (source_url)
+  if (tender.source_url) {
+    return tender.source_url;
+  }
+  
+  const source = tender.source || 'TUNEPS';
+  const reference = tender.reference;
+  
+  if (!reference) return null;
+  
+  // Générer l'URL selon la source
+  if (source.toUpperCase() === 'HAICOP') {
+    return `https://www.marchespublics.gov.tn/fr/appels-doffres/${reference}`;
+  }
+  
+  if (source.toUpperCase() === 'TUNEPS') {
+    // Si on a tender_id, construire l'URL complète
+    if (tender.tender_id) {
+      return `https://www.tuneps.tn/portail/offres/details/${tender.tender_id}/${reference}`;
+    }
+    return null;
+  }
+  
+  return null;
+};
+
+
+
+
+
   return (
     <div className="it-search-container" style={{ marginLeft: '280px', padding: '20px', maxWidth: '1200px' }}>
       <div className="search-header" style={{ background: 'linear-gradient(135deg, #1a3a5c, #2d6a8f)', color: 'white', padding: '30px 40px', borderRadius: '12px', marginBottom: '30px' }}>
@@ -510,13 +541,13 @@ function ITSearch() {
                         </span>
                       )}
                     </div>
-                    <button
+                    {/* <button
                       className="expand-btn"
                       onClick={() => toggleExpand(index)}
                       style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#2d6a8f' }}
                     >
                       {isExpanded ? '▼' : '▶'}
-                    </button>
+                    </button> */}
                   </div>
 
                   <div className="tender-meta" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '8px' }}>
@@ -551,6 +582,41 @@ function ITSearch() {
                       </div>
                     </div>
                   )}
+                  {/* ✅ BOUTON VERS LA SOURCE */}
+{getTenderSourceUrl(tender) && (
+  <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #e0e6ed' }}>
+    <a 
+      href={getTenderSourceUrl(tender)} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      style={{
+        display: 'inline-block',
+        padding: '6px 16px',
+        background: 'linear-gradient(135deg, #1a237e, #0d47a1)',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        fontSize: '13px',
+        fontWeight: 500,
+        textDecoration: 'none',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease'
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.background = 'linear-gradient(135deg, #0d47a1, #1a237e)';
+        e.target.style.transform = 'translateY(-1px)';
+        e.target.style.boxShadow = '0 4px 12px rgba(26, 35, 126, 0.3)';
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.background = 'linear-gradient(135deg, #1a237e, #0d47a1)';
+        e.target.style.transform = 'translateY(0)';
+        e.target.style.boxShadow = 'none';
+      }}
+    >
+      🔗 Voir sur {tender.source || 'TUNEPS'}
+    </a>
+  </div>
+)}
                 </div>
               );
             })}

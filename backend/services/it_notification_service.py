@@ -78,6 +78,19 @@ class ITNotificationService:
                 # Format date for display
                 display_date = self._format_date(publication_date or indexed_at)
                 
+                # filtered_tenders.append({
+                #     'reference': tender.get('reference', 'N/A'),
+                #     'title': tender.get('title', 'Untitled'),
+                #     'buyer': tender.get('buyer', 'Unknown'),
+                #     'deadline': tender.get('deadline', 'N/A'),
+                #     'publication_date': display_date,
+                #     'source': tender.get('source', 'Unknown'),
+                #     'is_it': is_it,
+                #     'it_confidence': tender.get('it_confidence', 'None'),
+                #     'ai_score': tender.get('ai_score', 0),
+                #     'content': tender.get('content', '')[:300],
+                #     'category': tender.get('category', 'other'),
+                # })
                 filtered_tenders.append({
                     'reference': tender.get('reference', 'N/A'),
                     'title': tender.get('title', 'Untitled'),
@@ -85,6 +98,7 @@ class ITNotificationService:
                     'deadline': tender.get('deadline', 'N/A'),
                     'publication_date': display_date,
                     'source': tender.get('source', 'Unknown'),
+                    'source_url': tender.get('source_url', ''),  # ✅ AJOUT
                     'is_it': is_it,
                     'it_confidence': tender.get('it_confidence', 'None'),
                     'ai_score': tender.get('ai_score', 0),
@@ -172,6 +186,18 @@ class ITNotificationService:
                         pass
                 
                 if include:
+                    # all_tenders.append({
+                    #     'reference': tender.get('reference', 'N/A'),
+                    #     'title': tender.get('title', 'Untitled'),
+                    #     'buyer': tender.get('buyer', 'Unknown'),
+                    #     'deadline': tender.get('deadline', 'N/A'),
+                    #     'publication_date': display_date,
+                    #     'source': tender.get('source', 'Unknown'),
+                    #     'is_it': is_it,
+                    #     'it_confidence': tender.get('it_confidence', 'None'),
+                    #     'ai_score': tender.get('ai_score', 0),
+                    #     'category': tender.get('category', 'other'),
+                    # })
                     all_tenders.append({
                         'reference': tender.get('reference', 'N/A'),
                         'title': tender.get('title', 'Untitled'),
@@ -179,6 +205,7 @@ class ITNotificationService:
                         'deadline': tender.get('deadline', 'N/A'),
                         'publication_date': display_date,
                         'source': tender.get('source', 'Unknown'),
+                        'source_url': tender.get('source_url', ''),  # ✅ AJOUT
                         'is_it': is_it,
                         'it_confidence': tender.get('it_confidence', 'None'),
                         'ai_score': tender.get('ai_score', 0),
@@ -435,44 +462,120 @@ class ITNotificationService:
 </html>
 """
     
+#     def _tender_to_html(self, tender: Dict) -> str:
+#         """Convert a single tender to HTML"""
+#         category = tender.get('category', 'other')
+#         is_it = tender.get('is_it', False)
+#         confidence = tender.get('it_confidence', 'None')
+#         ai_score = tender.get('ai_score', 0)
+        
+#         return f"""
+#         <div class="tender-card">
+#             <div class="tender-title">{tender.get('title', 'Untitled')}</div>
+#             <div class="tender-meta">
+#                 <strong>Reference:</strong> {tender.get('reference', 'N/A')}
+#             </div>
+#             <div class="tender-meta">
+#                 <strong>Buyer:</strong> {tender.get('buyer', 'Unknown')}
+#             </div>
+#             <div class="tender-meta">
+#                 <strong>Publication Date:</strong> {tender.get('publication_date', 'N/A')}
+#             </div>
+#             <div class="tender-meta tender-deadline">
+#                 <strong>Deadline:</strong> {tender.get('deadline', 'N/A')}
+#             </div>
+#             <div class="tender-meta">
+#                 <span class="category-badge">{category.replace('_', ' ').title()}</span>
+#                 {f'<span class="it-badge">IT ({confidence})</span>' if is_it else ''}
+#                 <span style="font-size:12px;color:#666;">Relevance: {ai_score:.0%}</span>
+#             </div>
+#         </div>
+#         """
+    
+#     def _tender_to_text(self, tender: Dict) -> str:
+#         """Convert a single tender to plain text"""
+#         return f"""
+# Title: {tender.get('title', 'Untitled')}
+# Reference: {tender.get('reference', 'N/A')}
+# Buyer: {tender.get('buyer', 'Unknown')}
+# Publication Date: {tender.get('publication_date', 'N/A')}
+# Deadline: {tender.get('deadline', 'N/A')}
+# Category: {tender.get('category', 'other')}
+# {'-'*50}
+# """
     def _tender_to_html(self, tender: Dict) -> str:
-        """Convert a single tender to HTML"""
+        """Convert a single tender to HTML with source link"""
         category = tender.get('category', 'other')
         is_it = tender.get('is_it', False)
         confidence = tender.get('it_confidence', 'None')
         ai_score = tender.get('ai_score', 0)
-        
-        return f"""
-        <div class="tender-card">
-            <div class="tender-title">{tender.get('title', 'Untitled')}</div>
-            <div class="tender-meta">
-                <strong>Reference:</strong> {tender.get('reference', 'N/A')}
-            </div>
-            <div class="tender-meta">
-                <strong>Buyer:</strong> {tender.get('buyer', 'Unknown')}
-            </div>
-            <div class="tender-meta">
-                <strong>Publication Date:</strong> {tender.get('publication_date', 'N/A')}
-            </div>
-            <div class="tender-meta tender-deadline">
-                <strong>Deadline:</strong> {tender.get('deadline', 'N/A')}
-            </div>
-            <div class="tender-meta">
-                <span class="category-badge">{category.replace('_', ' ').title()}</span>
-                {f'<span class="it-badge">IT ({confidence})</span>' if is_it else ''}
-                <span style="font-size:12px;color:#666;">Relevance: {ai_score:.0%}</span>
-            </div>
-        </div>
-        """
+        source_url = tender.get('source_url', '')
+        source = tender.get('source', 'TUNEPS')
+        reference = tender.get('reference', '')
     
-    def _tender_to_text(self, tender: Dict) -> str:
-        """Convert a single tender to plain text"""
+    # Construire le lien si source_url n'existe pas
+        if not source_url:
+            if source.upper() == 'HAICOP' and reference:
+                source_url = f"https://www.marchespublics.gov.tn/fr/appels-doffres/{reference}"
+    
+        link_html = ''
+        if source_url:
+            link_html = f'''
+        <div class="tender-meta" style="margin-top: 8px;">
+            <a href="{source_url}" target="_blank" style="display: inline-block; padding: 6px 16px; background: #1a237e; color: white; border-radius: 4px; text-decoration: none; font-size: 13px;">
+                🔗 Voir sur {source}
+            </a>
+        </div>
+        '''
+    
         return f"""
+    <div class="tender-card">
+        <div class="tender-title">{tender.get('title', 'Untitled')}</div>
+        <div class="tender-meta">
+            <strong>Reference:</strong> {tender.get('reference', 'N/A')}
+        </div>
+        <div class="tender-meta">
+            <strong>Buyer:</strong> {tender.get('buyer', 'Unknown')}
+        </div>
+        <div class="tender-meta">
+            <strong>Publication Date:</strong> {tender.get('publication_date', 'N/A')}
+        </div>
+        <div class="tender-meta tender-deadline">
+            <strong>Deadline:</strong> {tender.get('deadline', 'N/A')}
+        </div>
+        <div class="tender-meta">
+            <span class="category-badge">{category.replace('_', ' ').title()}</span>
+            {f'<span class="it-badge">IT ({confidence})</span>' if is_it else ''}
+            <span style="font-size:12px;color:#666;">Relevance: {ai_score:.0%}</span>
+        </div>
+        {link_html}
+    </div>
+    """
+
+    def _tender_to_text(self, tender: Dict) -> str:
+        """Convert a single tender to plain text with source link"""
+        source_url = tender.get('source_url', '')
+        source = tender.get('source', 'TUNEPS')
+        reference = tender.get('reference', '')
+    
+    # Construire le lien si source_url n'existe pas
+        if not source_url:
+            if source.upper() == 'HAICOP' and reference:
+                source_url = f"https://www.marchespublics.gov.tn/fr/appels-doffres/{reference}"
+    
+        text = f"""
 Title: {tender.get('title', 'Untitled')}
 Reference: {tender.get('reference', 'N/A')}
 Buyer: {tender.get('buyer', 'Unknown')}
 Publication Date: {tender.get('publication_date', 'N/A')}
 Deadline: {tender.get('deadline', 'N/A')}
 Category: {tender.get('category', 'other')}
-{'-'*50}
 """
+    
+        if source_url:
+            text += f"Source URL: {source_url}\n"
+        else:
+            text += f"Source: {source}\n"
+    
+        text += "-" * 50
+        return text

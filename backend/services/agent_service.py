@@ -155,7 +155,23 @@ class TenderAgent:
     # ============================================================
     # MAIN SEARCH
     # ============================================================
+    # services/agent_service.py - Ajouter cette méthode
 
+    def _enrich_with_source_url(self, results: List[Dict]) -> List[Dict]:
+        """Ajouter source_url à chaque résultat"""
+        from models.tender import Tender
+    
+        enriched = []
+        for result in results:
+            reference = result.get('reference')
+            if reference:
+                tender = Tender.query.filter_by(reference=reference).first()
+                result['source_url'] = tender.source_url if tender else None
+            else:
+                result['source_url'] = None
+            enriched.append(result)
+    
+        return enriched
     def search_tenders(
         self,
         query: str,
@@ -769,8 +785,8 @@ class TenderAgent:
             )
 
             logger.info("=" * 70)
-
-            return final_results
+            
+            return self._enrich_with_source_url(final_results)
 
         except Exception as e:
 

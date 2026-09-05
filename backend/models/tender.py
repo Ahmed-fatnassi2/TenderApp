@@ -57,6 +57,54 @@
 #         return f"<Tender {self.source_reference}>"
 
 
+
+
+
+
+
+# the last one
+
+
+
+
+# from datetime import datetime
+# from database import db
+
+# class Tender(db.Model):
+#     """Tender entity - 5 fields only"""
+#     __tablename__ = 'tenders'
+    
+#     id = db.Column(db.Integer, primary_key=True)
+    
+#     # 5 fields from TUNEPS
+#     reference = db.Column(db.String(50), unique=True, nullable=False, index=True)  # N° A.O
+#     buyer = db.Column(db.String(200))  # Acheteur public
+#     publication_date = db.Column(db.String(30))  # Date Publication
+#     title = db.Column(db.Text)  # Objet A.O (full description)
+#     deadline = db.Column(db.String(50))  # Dernier Délai Soumissions Offres
+    
+#     # Metadata
+#     source = db.Column(db.String(50), default='TUNEPS')
+#     scraped_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+#     def to_dict(self):
+#         return {
+#             'id': self.id,
+#             'reference': self.reference,
+#             'buyer': self.buyer,
+#             'publication_date': self.publication_date,
+#             'title': self.title,
+#             'deadline': self.deadline,
+#             'source': self.source,
+#             'scraped_at': self.scraped_at.isoformat() if self.scraped_at else None
+#         }
+    
+#     def __repr__(self):
+#         return f"<Tender {self.reference}>"
+
+
+
+
 from datetime import datetime
 from database import db
 
@@ -73,6 +121,9 @@ class Tender(db.Model):
     title = db.Column(db.Text)  # Objet A.O (full description)
     deadline = db.Column(db.String(50))  # Dernier Délai Soumissions Offres
     
+    # ✅ AJOUTER la colonne source_url (existe déjà en base)
+    source_url = db.Column(db.String(500))  # Lien vers l'appel d'offres original
+    
     # Metadata
     source = db.Column(db.String(50), default='TUNEPS')
     scraped_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -85,6 +136,7 @@ class Tender(db.Model):
             'publication_date': self.publication_date,
             'title': self.title,
             'deadline': self.deadline,
+            'source_url': self.source_url,  # ✅ Ajouter dans to_dict
             'source': self.source,
             'scraped_at': self.scraped_at.isoformat() if self.scraped_at else None
         }

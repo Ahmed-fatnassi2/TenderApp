@@ -365,8 +365,8 @@ def start_scraper_scheduler(app):
     
     # ✅ PRODUCTION TIMES - Only these should run
     schedule.every().day.at("07:00").do(run_scrape_and_index)
-    schedule.every().day.at("07:28").do(run_check_expired)
-    schedule.every().day.at("07:30").do(run_delete_expired)
+    schedule.every().day.at("07:30").do(run_check_expired)
+    schedule.every().day.at("07:32").do(run_delete_expired)
     
     # ❌ REMOVE ALL TEST TIMES
     # schedule.every().day.at("11:47").do(run_check_expired)

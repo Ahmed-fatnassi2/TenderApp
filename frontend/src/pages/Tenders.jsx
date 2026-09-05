@@ -544,6 +544,45 @@ function Tenders() {
     return null;
   };
 
+
+
+// Obtenir l'URL du tender sur la source
+const getTenderSourceUrl = (tender) => {
+  // Si l'URL est déjà stockée (source_url)
+  if (tender.source_url) {
+    return tender.source_url;
+  }
+  
+  const source = tender.source || 'TUNEPS';
+  const reference = tender.reference;
+  
+  if (!reference) return null;
+  
+  // Générer l'URL selon la source
+  if (source.toUpperCase() === 'HAICOP') {
+    return `https://www.marchespublics.gov.tn/fr/appels-doffres/${reference}`;
+  }
+  
+  if (source.toUpperCase() === 'TUNEPS') {
+    // Si on a tender_id, construire l'URL complète
+    if (tender.tender_id) {
+      return `https://www.tuneps.tn/portail/offres/details/${tender.tender_id}/${reference}`;
+    }
+    return null;
+  }
+  
+  return null;
+};
+
+
+
+
+
+
+
+
+
+
   return (
     <div className="tenders-container">
       <div className="tenders-header">
@@ -731,15 +770,24 @@ function Tenders() {
                       </div>
                     )}
 
-                    <div className="tender-actions">
-                      {/* <button className="action-view">View Details</button> */}
-                      <button
-                        className="action-delete"
-                        onClick={() => handleDelete(tender.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    {getTenderSourceUrl(tender) && (
+  <div className="tender-actions">
+    <a 
+      href={getTenderSourceUrl(tender)} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="btn-source"
+    >
+      🔗 Voir sur {tender.source || 'TUNEPS'}
+    </a>
+    <button
+      className="action-delete"
+      onClick={() => handleDelete(tender.id)}
+    >
+      Delete
+    </button>
+  </div>
+)}
                   </div>
                 )}
               </div>
